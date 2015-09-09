@@ -1,7 +1,7 @@
 bin/
 
 # sbt specific
-.cache
+.cache*
 .history
 .lib/
 dist/*
