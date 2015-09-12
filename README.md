@@ -5,6 +5,7 @@ evaluation of rest client frameworks for scala
 * [Dispatch](http://dispatch.databinder.net)
 * [ScalaWS](https://www.playframework.com/documentation/2.3.x/ScalaWS)
 * [Newman](https://github.com/stackmob/newman)
+* [Spring](http://projects.spring.io/spring-framework/)
 
 ## How to run:
  
