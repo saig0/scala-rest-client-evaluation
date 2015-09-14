@@ -7,8 +7,9 @@ import net.liftweb.json._
 import net.liftweb.json.Serialization._
 import evaluation.Post
 import com.ning.http.client.RequestBuilder
+import evaluation.RestClient
 
-class DispatchClient {
+class DispatchClient extends RestClient {
   
 	private implicit val formats = DefaultFormats
 	
