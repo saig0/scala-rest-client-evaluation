@@ -6,6 +6,8 @@ object TestObjects {
 
 	val POSTS_COUNT = 100
 	
+	val POSTS_FOR_USER_1_COUNT = 10 
+	
 	val FIRST_POST = Post(
 				userId = 1,
 				id = 1, 

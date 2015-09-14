@@ -5,7 +5,7 @@ package evaluation
  */
 object RestService {
   
-	val host = "http://jsonplaceholder.typicode.com"
+	val host = "jsonplaceholder.typicode.com"
 	
 	val postUrl = s"${host}/posts"  
 	
