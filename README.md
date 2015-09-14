@@ -17,7 +17,7 @@ evaluation of rest client frameworks for scala
  
  The tests make rest calls against a [fake online rest api](http://jsonplaceholder.typicode.com).
  
- # Dispatch
+# Dispatch
  
  Call url via GET and parse json response. JSON is parsed by [Lift JSON](https://github.com/lift/framework/tree/master/core/json).
  
