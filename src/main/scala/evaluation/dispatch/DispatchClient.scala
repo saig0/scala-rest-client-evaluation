@@ -17,40 +17,40 @@ class DispatchClient extends RestClient {
 	
 	val url = host(RestService.postUrl)
 	
-	def getPosts: List[Post] = {
+	def getPosts: Future[List[Post]] = {
 		handleRequest(url GET, json => 
-			parse(json).extract[List[Post]])()
+			parse(json).extract[List[Post]])
 	}	
 	
-	def getPostForUser(userId: Int): List[Post] = {
+	def getPostForUser(userId: Int): Future[List[Post]] = {
 		val request = url GET
 		val requstWithQueryParameter = url <<? Map("userId" -> userId.toString)
 		// val requstWithQueryParameter = request.addQueryParameter("userId", userId.toString)
 		
 		handleRequest(requstWithQueryParameter, json => 
-			parse(json).extract[List[Post]])()
+			parse(json).extract[List[Post]])
 	}
 	
-	def createNewPost(post: Post): Post = {
+	def createNewPost(post: Post): Future[Post] = {
 		val json: String = write(post)		
 		val request = jsonRequest(url POST, json)
 		
 		handleRequest(request, json => 
-			parse(json).extract[Post])()
+			parse(json).extract[Post])
 	}
 	
-	def updatePost(post: Post): Post = {
+	def updatePost(post: Post): Future[Post] = {
 		val json: String = write(post)		
 		val request = jsonRequest(url PUT, json)
 		
 		handleRequest(request, json => 
-			parse(json).extract[Post])()
+			parse(json).extract[Post])
 	}
 	
-	def deletePost(id: Int): Boolean = {
+	def deletePost(id: Int): Future[Boolean] = {
 		val request = url / id.toString DELETE
 		
-		handleRequest(request, _ => (true))()
+		handleRequest(request, _ => (true))
 	}
 	
 	private def jsonRequest(request: Req, json: String): Req = {

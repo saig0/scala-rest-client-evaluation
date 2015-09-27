@@ -1,14 +1,17 @@
 package evaluation
 
+import scala.concurrent.Future
+
 trait RestClient {
   
-	def getPosts: List[Post]
+	def getPosts: Future[List[Post]]
 	
-	def getPostForUser(userId: Int): List[Post]
+	def getPostForUser(userId: Int): Future[List[Post]]
 	
-	def createNewPost(post: Post): Post
+	def createNewPost(post: Post): Future[Post]
 	
-	def updatePost(post: Post): Post
+	def updatePost(post: Post): Future[Post]
 	
-	def deletePost(id: Int): Boolean
+	def deletePost(id: Int): Future[Boolean]
+	
 }

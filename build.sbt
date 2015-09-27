@@ -23,3 +23,5 @@ libraryDependencies += "org.springframework" % "spring-web" % "4.2.0.RELEASE"
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.6.1"
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.1"
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.6.1"
+
+libraryDependencies += "com.typesafe.play" % "play-ws_2.11" % "2.4.3"
