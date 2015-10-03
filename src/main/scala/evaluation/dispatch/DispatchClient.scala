@@ -8,6 +8,7 @@ import net.liftweb.json.Serialization._
 import evaluation.Post
 import com.ning.http.client.RequestBuilder
 import evaluation.RestClient
+import evaluation.CreatePostResponse
 
 class DispatchClient extends RestClient {
   
@@ -31,17 +32,17 @@ class DispatchClient extends RestClient {
 			parse(json).extract[List[Post]])
 	}
 	
-	def createNewPost(post: Post): Future[Post] = {
+	def createNewPost(post: Post): Future[CreatePostResponse] = {
 		val json: String = write(post)		
 		val request = jsonRequest(url POST, json)
 		
 		handleRequest(request, json => 
-			parse(json).extract[Post])
+			parse(json).extract[CreatePostResponse])
 	}
 	
-	def updatePost(post: Post): Future[Post] = {
+	def updatePost(id: Int, post: Post): Future[Post] = {
 		val json: String = write(post)		
-		val request = jsonRequest(url PUT, json)
+		val request = jsonRequest(url / id.toString PUT, json)
 		
 		handleRequest(request, json => 
 			parse(json).extract[Post])

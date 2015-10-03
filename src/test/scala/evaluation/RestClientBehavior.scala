@@ -8,6 +8,7 @@ import org.scalatest._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.concurrent.Await
+import evaluation.CreatePostResponse
 
 trait RestClientBehavior extends Matchers { this: FlatSpec =>
 
@@ -36,17 +37,14 @@ trait RestClientBehavior extends Matchers { this: FlatSpec =>
 
 			whenReady(client.createNewPost(newPost)) { result =>
 
-				result.id should equal(POSTS_COUNT + 1)
-				result.userId should equal(1)
-				result.title should equal("new post")
-				result.body should equal("test")
+				result should equal(CreatePostResponse(id = POSTS_COUNT + 1))
 			}
 		}
 
 		it should "update a post via POST" in {
 			val updatedPost = FIRST_POST.copy(body = "updated")
 
-			whenReady(client.createNewPost(updatedPost)) { result =>
+			whenReady(client.updatePost(FIRST_POST.id, updatedPost)) { result =>
 
 				result.id should equal(FIRST_POST.id)
 				result.userId should equal(FIRST_POST.userId)
@@ -67,7 +65,7 @@ trait RestClientBehavior extends Matchers { this: FlatSpec =>
 
 	// somehow org.scalatest.concurrent.Futures do not work
 	private def whenReady[T](future: Future[T])(test: T => Unit) = {
-		val result = Await.result(future, 1 second)
+		val result = Await.result(future, 3 second)
 		test(result)
 	}
 

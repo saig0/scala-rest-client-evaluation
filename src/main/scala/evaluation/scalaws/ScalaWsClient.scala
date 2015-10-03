@@ -9,6 +9,7 @@ import scala.concurrent.Future
 import evaluation.RestService
 import play.api.libs.json._
 import scala.concurrent.ExecutionContext.Implicits.global
+import evaluation.CreatePostResponse
 
 class ScalaWsClient extends RestClient {
 
@@ -19,6 +20,8 @@ class ScalaWsClient extends RestClient {
 
 	implicit val postReads = Json.reads[Post]
 	implicit val postWrites = Json.writes[Post]
+	
+	implicit val createPostResponseReads = Json.reads[CreatePostResponse]
 
 	def getPosts: Future[List[Post]] = {
 		extractJson[List[Post]](
@@ -35,16 +38,16 @@ class ScalaWsClient extends RestClient {
 		)
 	}
 
-	def createNewPost(post: Post): Future[Post] = {
-		extractJson[Post](
+	def createNewPost(post: Post): Future[CreatePostResponse] = {
+		extractJson[CreatePostResponse](
 			client.url(url)
 				.post(Json.toJson(post))
 		)
 	}
 
-	def updatePost(post: Post): Future[Post] = {
+	def updatePost(id: Int, post: Post): Future[Post] = {
 		extractJson[Post](
-			client.url(url)
+			client.url(s"$url/${id.toString}")
 				.put(Json.toJson(post))
 		)
 	}

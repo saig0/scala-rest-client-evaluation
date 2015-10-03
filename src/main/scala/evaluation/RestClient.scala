@@ -8,9 +8,9 @@ trait RestClient {
 	
 	def getPostForUser(userId: Int): Future[List[Post]]
 	
-	def createNewPost(post: Post): Future[Post]
+	def createNewPost(post: Post): Future[CreatePostResponse]
 	
-	def updatePost(post: Post): Future[Post]
+	def updatePost(id: Int, post: Post): Future[Post]
 	
 	def deletePost(id: Int): Future[Boolean]
 	
