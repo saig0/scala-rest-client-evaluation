@@ -18,6 +18,9 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import evaluation.CreatePostResponse
 import org.springframework.web.util.UriComponentsBuilder
+import java.lang.reflect.{Type, ParameterizedType}
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.`type`.TypeReference; 
 
 /**
  * @author Philipp
@@ -26,8 +29,6 @@ class SpringClient extends RestClient {
 
 	val mapper = new ObjectMapper
 	mapper.registerModule(DefaultScalaModule)
-
-	// val mapper = new ObjectMapper() with ScalaObjectMapper
 
 	val template = new RestTemplate // new AsyncRestTemplate
 
@@ -38,6 +39,7 @@ class SpringClient extends RestClient {
 		Future {
 			val response = template.getForObject(url, classOf[String])
 			mapper.readValue(response, classOf[List[Post]])
+			deserialize[List[Post]](response)
 		}
 
 		//		val callback = new ListenableFutureCallback[ResponseEntity[List[Post]]](){
@@ -54,7 +56,7 @@ class SpringClient extends RestClient {
 			val urlWithParam = builder.build.encode.toUri
 			
 			val response = template.getForObject(urlWithParam, classOf[String])
-			mapper.readValue(response, classOf[List[Post]])
+			deserialize[List[Post]](response)
 		}
 	}
 
@@ -62,7 +64,7 @@ class SpringClient extends RestClient {
 		Future {
 			val json = mapper.writeValueAsString(post)
 			val response = template.postForObject(url, json, classOf[String])
-			mapper.readValue(response, classOf[CreatePostResponse])
+			deserialize[CreatePostResponse](response)
 		}
 	}
 
@@ -75,7 +77,7 @@ class SpringClient extends RestClient {
 			val entity = new HttpEntity[String](json, headers)
 			
 			val response = template.exchange(s"$url/${id.toString}", HttpMethod.PUT, entity, classOf[String]).getBody
-			mapper.readValue(response, classOf[Post])
+			deserialize[Post](response)
 		}
 	}
 
@@ -85,5 +87,25 @@ class SpringClient extends RestClient {
 			true
 		}
 	}
+	
+	private def deserialize[T: Manifest](value: String) : T =
+    mapper.readValue(value, typeReference[T])
+
+  private [this] def typeReference[T: Manifest] = new TypeReference[T] {
+    override def getType = typeFromManifest(manifest[T])
+  }
+
+	// need to de-serialize List[Post]
+	// mapper.readValue(json, classOf[List[Post]]) -> List[Map[String,Any]]
+  private [this] def typeFromManifest(m: Manifest[_]): Type = {
+    if (m.typeArguments.isEmpty) { m.runtimeClass }
+    else new ParameterizedType {
+      def getRawType = m.runtimeClass
+
+      def getActualTypeArguments = m.typeArguments.map(typeFromManifest).toArray
+
+      def getOwnerType = null
+    }
+  }
 
 }
