@@ -5,6 +5,8 @@ import evaluation.dispatch.RestClientBehavior
 import evaluation.dispatch.DispatchClient
 import evaluation.scalaws.ScalaWsClient
 import evaluation.spring.SpringClient
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 class RestClientTest extends FlatSpec with RestClientBehavior {
   
